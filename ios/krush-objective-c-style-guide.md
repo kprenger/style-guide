@@ -678,7 +678,7 @@ This will prevent [possible and sometimes prolific crashes](http://cocoasamurai.
 
 ## Character Limit
 
-Maintain a 120 character per line limit.
+Maintain a 121 character per line limit.
 
 ## Line Breaks
 

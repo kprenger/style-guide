@@ -272,7 +272,7 @@ Keep imports minimal. For example, don't import `UIKit` when importing `Foundati
 
 ## Character Limit
 
-Maintain a 120 character per line limit
+Maintain a 121 character per line limit
 
 ## Spacing
 
