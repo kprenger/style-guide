@@ -1,35 +1,209 @@
-# Krush React, JSX, and html Style Guide
+# Krush React, JSX, and Html Style Guide
 
-Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)
+Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react) and http://codeguide.co/#html
 
 ## Table of Contents
 
   1. [Basic Rules](#basic-rules)
-  1. [Class vs `React.createClass` vs stateless](#class-vs-reactcreateclass-vs-stateless)
-  1. [Naming](#naming)
-  1. [Declaration](#declaration)
-  1. [Alignment](#alignment)
-  1. [Quotes](#quotes)
-  1. [Spacing](#spacing)
-  1. [Props](#props)
-  1. [Refs](#refs)
-  1. [Parentheses](#parentheses)
-  1. [Tags](#tags)
-  1. [Methods](#methods)
-  1. [Ordering](#ordering)
-  1. [`isMounted`](#ismounted)
+  1. [HTML](#html)
+    1. [Be Semanitc](#be-semantic)
+    1. [Tags](#tags)
+      1. [Alignment](#alignment)
+    1. [Naming](#naming)
+    1. [Attribute Order](#attribute-order)
+  1. [React](#react)
+    1. [Class vs `React.createClass` vs stateless](#class-vs-reactcreateclass-vs-stateless)
+    1. [Code Naming](#code-naming)
+    1. [Declaration](#declaration)
+    1. [Quotes](#quotes)
+    1. [Props](#props)
+    1. [Refs](#refs)
+    1. [Parentheses](#parentheses)
+    1. [Methods](#methods)
+    1. [Ordering](#ordering)
+    1. [Render Efficiently](#render-efficiently)
+    1. [`isMounted`](#ismounted)
 
-## Basic Rules
+# Basic Rules
 
+  - Use 4-space soft indentations
   - Only include one React component per file.
     - However, multiple [stateless functional components](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions) are allowed per file.
     <!-- eslint: [`react/no-multi-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-multi-comp.md#ignorestateless). -->
   - Always use JSX syntax.
-  - Do not use `React.createElement` unless you're initializing the app from a file that is not JSX.
+
+# HTML
+
+## Be Semantic
+
+Html 5 provides special tags that provide additional descriptive meaning, such as `header`, `aside`, and `main`.
+Use these semantic tags whenever they fit to better define your markup.
+[More Details](https://www.w3.org/wiki/HTML_structural_elements)
+
+```jsx
+//bad
+<body>
+    <div id="header">
+        <!-- header content goes in here -->
+    </div>
+    <div id="sidebar">
+        <!-- sidebar content goes in here -->
+    </div>
+    <div id="main">
+        <!-- main page content goes in here -->
+    </div>
+</body>
+
+//good
+<body>
+    <header>
+        <!-- header content goes in here -->
+    </header>
+    <section class="sidebar">
+        <!-- sidebar content goes in here -->
+    </section>
+    <main>
+        <!-- main page content goes in here -->
+    </main>
+</body>
+```
+
+## Tags
+
+  - Always self-close tags that have no children.
+  <!-- eslint: [`react/self-closing-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/self-closing-comp.md) -->
+
+    ```jsx
+    // bad
+    <Foo className="stuff"></Foo>
+
+    // good
+    <Foo className="stuff" />
+    ```
+
+  - Always include a single space in single-line self-closing tags. Don't include the space for regular tags.
+  <!-- eslint: [`no-multi-spaces`](http://eslint.org/docs/rules/no-multi-spaces), [`react/jsx-space-before-closing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-space-before-closing.md) -->
+
+    ```jsx
+    // bad
+    <Foo/>
+
+    // very bad
+    <Foo                 />
+
+    // bad
+    <Foo
+     />
+
+    // good
+    <Foo />
+
+    // bad
+    <Foo > ... </Foo>
+
+    // good
+    <Foo> ... </Foo>
+    ```
+
+### Alignment
+
+  - Whenever practical, keep an entire tag on one line. If the properties are too long or many, follow these alignment styles:
+    - start properties on the next line after the tag, indented once
+    - place the end of a self-closing tag on its own line
+    - End an opening tag (e.g., `>` of `<div>`) on the same line of the last property
+    - Leave an empty line between properties and children
+
+```jsx
+// ideal (all props in line with tag)
+<div id="prop" className="prop">
+    <span id="prop" className="prop" />
+    <span id="ha" />
+</div>
+
+// bad (> belongs on previous line)
+<div
+    id="prop"
+    className="prop"
+>
+    <span
+        id="prop"
+        className="prop"
+    />
+    <span id="ha" />
+</div>
+
+// bad (missing space between props and children)
+<div
+    id="prop"
+    className="prop">
+    <span
+        id="prop"
+        className="prop" />
+
+    <span id="ha" />
+</div>
+
+// bad (extra indentation for props)
+<div
+        id="prop"
+        className="prop" >
+    <span
+        id="prop"
+        className="prop" />
+    <span id="ha" />
+</div>
+
+// bad (first prop belongs on new line)
+<div id="prop"
+     className="prop" >
+    <span
+        id="prop"
+        className="prop" />
+    <span id="ha" />
+</div>
+
+// good
+<div
+    id="prop"
+    className="prop">
+
+    <span
+        id="prop"
+        className="prop"
+    />
+    <span id="ha" />
+</div>
+```
+
+## Naming
+
+Use "dash-case" rather than camelCase or similar in `class`, `id`, `name`, and any other applicable attributes.
+This includes any custom `data-*` attributes and their values, when appropriate. See [The CSS guide](./krush-css-style-guide.md) for exceptions.
+
+```jsx
+// bad
+<Foo bar="Bar" data-bazBazBaz="baz" />
+
+// good
+<Foo bar="bar" data-baz-baz-baz="baz" />
+```
+
+## Attribute Order
+
+HTML attributes should come in this particular order for easier reading of code.
+
+  - `class`
+  - `id`, `name`
+  - `data-*`
+  - `src`, `for`, `type`, `href`, `value`
+  - `title`, `alt`
+  - `role`, `aria-*`
+
+# React
 
 ## Class vs `React.createClass` vs stateless
 
-  - If you have internal state and/or refs, prefer `class extends React.Component` over `React.createClass` unless you have a very good reason to use mixins.
+  - If you have internal state and/or refs, prefer `class extends React.Component` over `React.createClass` unless you have a very good reason to use mixins. Extend `React.PureComponent` when appropriate, or use a Stateless Functional Component for small, reusable components.
   <!-- eslint: [`react/prefer-es6-class`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md) [`react/prefer-stateless-function`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md) -->
 
     ```jsx
@@ -71,7 +245,7 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
     }
     ```
 
-## Naming
+## Code Naming
 
   - **Extensions**: Use `.tsx` extension for React components written in TypeScript.
   - **Filename**: Use PascalCase for filenames. E.g., `ReservationCard.tsx`.
@@ -159,35 +333,7 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
     export default class ReservationCard extends React.Component {
     }
     ```
-
-## Alignment
-
-  - Follow these alignment styles for JSX syntax.
-  <!-- eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md) -->
-
-    ```jsx
-    // bad
-    <Foo superLongParam="bar"
-         anotherSuperLongParam="baz" />
-
-    // good
-    <Foo
-      superLongParam="bar"
-      anotherSuperLongParam="baz"
-    />
-
-    // if props fit in one line then keep it on the same line
-    <Foo bar="bar" />
-
-    // children get indented normally
-    <Foo
-      superLongParam="bar"
-      anotherSuperLongParam="baz"
-    >
-      <Quux />
-    </Foo>
-    ```
-
+    
 ## Quotes
 
   - Always use double quotes (`"`) for JSX attributes, but single quotes (`'`) for all other JS.
@@ -209,26 +355,6 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
     <Foo style={{ left: '20px' }} />
     ```
 
-## Spacing
-
-  - Always include a single space in your self-closing tag.
-  <!-- eslint: [`no-multi-spaces`](http://eslint.org/docs/rules/no-multi-spaces), [`react/jsx-space-before-closing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-space-before-closing.md) -->
-
-    ```jsx
-    // bad
-    <Foo/>
-
-    // very bad
-    <Foo                 />
-
-    // bad
-    <Foo
-     />
-
-    // good
-    <Foo />
-    ```
-
   - Do not pad JSX curly braces with spaces (but do still pad JS object braces).
   <!-- eslint: [`react/jsx-curly-spacing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-curly-spacing.md) -->
 
@@ -238,6 +364,9 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
 
     // good
     <Foo bar={baz} />
+
+    // good
+    <Foo bar={{ baz: biz }} />
     ```
 
 ## Props
@@ -273,7 +402,7 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
     />
     ```
 
-  - Always include an `alt` prop on `<img>` tags. If the image is presentational, `alt` can be an empty string or the `<img>` must have `role="presentation"`.
+  - Always include an `alt` prop on `<img>` tags. If the image is presentational, the `<img>` must have `role="presentation"`.
   <!-- eslint: [`jsx-a11y/img-has-alt`](https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/img-has-alt.md) -->
 
     ```jsx
@@ -283,7 +412,7 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
     // good
     <img src="hello.jpg" alt="Me waving hello" />
 
-    // good
+    // bad
     <img src="hello.jpg" alt="" />
 
     // good
@@ -352,32 +481,6 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
 
   - Avoid React propTypes and defaultProps in favor of TypeScript Interfaces and default values
 
-  <!-- ```jsx
-  // bad
-  function SFC({ foo, bar, children }) {
-    return <div>{foo}{bar}{children}</div>;
-  }
-  SFC.propTypes = {
-    foo: PropTypes.number.isRequired,
-    bar: PropTypes.string,
-    children: PropTypes.node,
-  };
-
-  // good
-  function SFC({ foo, bar }) {
-    return <div>{foo}{bar}</div>;
-  }
-  SFC.propTypes = {
-    foo: PropTypes.number.isRequired,
-    bar: PropTypes.string,
-    children: PropTypes.node,
-  };
-  SFC.defaultProps = {
-    bar: '',
-    children: null,
-  };
-  ``` -->
-
 ## Refs
 
   - Always use ref callbacks instead of strings. Use ref sparingly.
@@ -422,35 +525,6 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
       const body = <div>hello</div>;
       return <MyComponent>{body}</MyComponent>;
     }
-    ```
-
-## Tags
-
-  - Always self-close tags that have no children.
-  <!-- eslint: [`react/self-closing-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/self-closing-comp.md) -->
-
-    ```jsx
-    // bad
-    <Foo className="stuff"></Foo>
-
-    // good
-    <Foo className="stuff" />
-    ```
-
-  - If your component has multi-line properties, close its tag on a new line. (Disputed)
-  <!-- eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md) -->
-
-    ```jsx
-    // bad
-    <Foo
-      bar="bar"
-      baz="baz" />
-
-    // good
-    <Foo
-      bar="bar"
-      baz="baz"
-    />
     ```
 
 ## Methods
@@ -509,9 +583,8 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
 
 ## Ordering
 
-  - Ordering for `class extends React.Component`:
+Most components will have only a few members. For clarity, order those members according to this list:
 
-  1. optional `static` methods
   1. `constructor`
   1. `getChildContext`
   1. `componentWillMount`
@@ -521,35 +594,17 @@ Adapted from [Airbnb's React/JSX Style Guide](https://github.com/airbnb/javascri
   1. `componentWillUpdate`
   1. `componentDidUpdate`
   1. `componentWillUnmount`
-  1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
+  1. *clickHandlers or eventHandlers* like `handleClickSubmit()` or `handleChangeDescription()`
   1. *getter methods for `render`* like `getSelectReason()` or `getFooterContent()`
   1. *optional render methods* like `renderNavigation()` or `renderProfilePicture()`
   1. `render`
+  1. `static` methods
 
-  - Ordering for `React.createClass`:
-  <!-- eslint: [`react/sort-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/sort-comp.md) -->
+## Render Efficiently
 
-  1. `displayName`
-  1. `propTypes`
-  1. `contextTypes`
-  1. `childContextTypes`
-  1. `mixins`
-  1. `statics`
-  1. `defaultProps`
-  1. `getDefaultProps`
-  1. `getInitialState`
-  1. `getChildContext`
-  1. `componentWillMount`
-  1. `componentDidMount`
-  1. `componentWillReceiveProps`
-  1. `shouldComponentUpdate`
-  1. `componentWillUpdate`
-  1. `componentDidUpdate`
-  1. `componentWillUnmount`
-  1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
-  1. *getter methods for `render`* like `getSelectReason()` or `getFooterContent()`
-  1. *optional render methods* like `renderNavigation()` or `renderProfilePicture()`
-  1. `render`
+Nearly all components should be "pure" and extend `React.PureComponent`. Be careful about mutable state in such cases, as this will shallow-compare state and props. With impure components, use shouldComponentUpdate to optimize React's render process if practical. Use "[stateless functional components][stateless]" for small, simple components that have no state.
+
+[stateless]:https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components
 
 ## `isMounted`
 
