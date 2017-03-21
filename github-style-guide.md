@@ -4,8 +4,20 @@ As Github users, we want to ensure our commit messages and PR requests follow si
 
 ## Table of Contents
 
+* [Branch Names](#branch-names)
 * [Commit Messages](#commit-messages)
 * [Pull Requests](#pull-requests)
+
+## Branch Names
+
+Branch names follow this convention `<ticket type>/<ticket number>-<description (if preferred)>`. The `<ticket type>` refers to an Epic, Story, Bug, etc; the `<ticket number>` refers to the JIRA ticket number; and the `<description>` is an optional description of what is contained in the branch.
+
+```bash
+feature/OVODEV-1234-new-feature-thing
+feature/OVODEV-8675
+bugfix/OVODEV-9876-cannot-use-app
+epic/OVODEV-5555-new-screen-stuff
+```
 
 ## Commit Messages
 
