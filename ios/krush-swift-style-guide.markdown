@@ -17,7 +17,7 @@
   * [Protocol Conformance](#protocol-conformance)
   * [Unused Code](#unused-code)
   * [Minimal Imports](#minimal-imports)
-* [Project Organization] (#project-organization)
+* [Project Organization](#project-organization)
 * [Character Limit](#character-limit)
 * [Spacing](#spacing)
 * [Comments](#comments)
@@ -626,11 +626,17 @@ When accessing an optional value, use optional chaining if the value is only acc
 textContainer?.textLabel?.setNeedsDisplay()
 ```
 
-Use optional binding when it's more convenient to unwrap once and perform multiple operations:
+Use optional binding when you need to perform more than 2 operations on the same optional variable or captured list in a closure (e.g. `[weak self]`):
 
 ```swift
 if let textContainer = textContainer {
     // do many things with textContainer
+}
+
+doThingWithCompletion { [weak self] in
+    guard let strongSelf = self else { return }
+
+    // do something with the unwrapped self
 }
 ```
 
