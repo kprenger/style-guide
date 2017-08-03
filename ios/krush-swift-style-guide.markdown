@@ -554,7 +554,7 @@ In Sprite Kit code, use `CGFloat` if it makes the code more succinct by avoiding
 
 ### Constants
 
-Constants are defined using the `let` keyword, and variables with the `var` keyword. Always use `let` instead of `var` if the value of the variable will not change.
+Constants are defined using the `let` keyword, and variables with the `var` keyword. Always use `let` instead of `var` if the value of the variable will not change. Constants should be wrapped in a `struct` that is globally accessible and contains smaller `struct`'s that pertain to the scope of the constant. To avoid bloating the `Constants` file, add new constants to the `Constants` struct using an extension.
 
 **Tip:** A good technique is to define everything using `let` and only change it to `var` if the compiler complains!
 
@@ -563,12 +563,14 @@ You can define constants on a type rather than an instance of that type using ty
 **Acceptable:**
 
 ```swift
-enum Math {
-    static let e  = 2.718281828459045235360287
-    static let pi = 3.141592653589793238462643
+struct Constants {
+    struct Math {
+        static let e  = 2.718281828459045235360287
+        static let pi = 3.141592653589793238462643
+    }
 }
 
-radius * Math.pi * 2 // circumference
+radius * Constants.Math.pi * 2 // circumference
 ```
 **Note:** The advantage of using a case-less enumeration is that it can't accidentally be instantiated and works as a pure namespace.
 
@@ -579,6 +581,33 @@ let e  = 2.718281828459045235360287  // pollutes global namespace
 let pi = 3.141592653589793238462643
 
 radius * pi * 2 // is pi instance data or a global constant?
+```
+
+**Acceptable:**
+
+```swift
+extension Constants {
+    struct Regex {
+    	static let hashtag = "(^|\\s)#([A-Za-z_][A-Za-z0-9_]*)"
+	static let email = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+    }
+}
+```
+
+**Unacceptable:**
+
+```swift
+struct Constants {
+    struct Math {
+        static let e  = 2.718281828459045235360287
+        static let pi = 3.141592653589793238462643
+    }
+    
+    struct Regex {
+    	static let hashtag = "(^|\\s)#([A-Za-z_][A-Za-z0-9_]*)"
+	static let email = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+    }
+}
 ```
 
 ### Static Methods and Variable Type Properties
