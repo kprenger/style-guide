@@ -17,7 +17,7 @@
   * [Protocol Conformance](#protocol-conformance)
   * [Unused Code](#unused-code)
   * [Minimal Imports](#minimal-imports)
-* [Project Organization] (#project-organization)
+* [Project Organization](#project-organization)
 * [Character Limit](#character-limit)
 * [Spacing](#spacing)
 * [Comments](#comments)
@@ -626,7 +626,7 @@ When accessing an optional value, use optional chaining if the value is only acc
 textContainer?.textLabel?.setNeedsDisplay()
 ```
 
-Use optional binding when it's more convenient to unwrap once and perform multiple operations:
+Use optional binding when you need to perform multiple operations (more than 2) on the same optional variable:
 
 ```swift
 if let textContainer = textContainer {
