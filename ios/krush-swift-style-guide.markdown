@@ -634,9 +634,9 @@ if let textContainer = textContainer {
 }
 
 doThingWithCompletion { [weak self] in
-    let strongSelf = self {
-        // do something with the unwrapped self
-    }
+    guard let strongSelf = self else { return }
+
+    // do something with the unwrapped self
 }
 ```
 
