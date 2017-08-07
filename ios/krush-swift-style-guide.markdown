@@ -47,6 +47,7 @@
 * [Parentheses](#parentheses)
 * [Views](#views)
 * [View Models](#view-models)
+* [View Controllers](#view-controllers)
 * [Credits](#credits)
 
 
@@ -1065,6 +1066,10 @@ struct User {
 }
 
 ```
+
+## View Controllers
+
+View controller's sole responsibility is to communicate updates to the view and receive actions from the view (IBActions, UIGestureRecognizers, etc). View controllers should not contain state for the view and should not be making any data requests (HTTP requests, database queries, etc). The view controller is the middle-man between the view and view model.
 
 ## Credits
 
