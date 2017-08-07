@@ -45,6 +45,8 @@
   * [Failing Guards](#failing-guards)
 * [Semicolons](#semicolons)
 * [Parentheses](#parentheses)
+* [Views](#views)
+* [View Models](#view-models)
 * [Credits](#credits)
 
 
@@ -971,7 +973,98 @@ if (name == "Hello") {
 }
 ```
 
- 
+## Views
+
+All views should be independent of any models and should be as reusable as possible. View property names should make it clear what they do, but abstract enough that it remains reuseable.
+
+**Acceptable**
+
+```swift
+class MyView: UIView {
+  @IBOutlet weak var titleLabel: UILabel!
+  @IBOutlet weak var subtitleLabel: UILabel!
+  @IBOutlet weak var imageView: UIImageView!
+}
+```
+
+**Unacceptable**
+```swift
+class VagueView: UIView {
+  @IBOutlet weak var label1: UILabel!
+  @IBOutlet weak var label2: UILabel!
+}
+```
+
+If it is possible for the view to reused it should be organized in a `nib` file and instantiated in the following manner.
+
+```swift
+class MyView: UIView {
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    let view = Bundle.main.loadNibNamed("MyView", owner: self, options: nil)?.first as! UIView
+    view.frame = frame
+    addSubview(view)
+  }
+}
+```
+
+## View Models
+
+View models are used to direct the view what to display without giving access to the view. All view models should be abstracted by a protocol. View models may be used for different view controllers, and my be passed between view controllers as a transfer of data.
+
+**Example**
+
+```swift
+class MyViewController: UIViewController {
+  @IBOutlet weak var titleLabel: UILabel!
+  @IBOutlet weak var imageView: UIImageView!
+  @IBOutlet weak var inputField: UITextField!
+  
+  var model: MyViewModelType!
+  
+  func viewDidLoad() {
+    titleLabel.text = model.title
+    imageView.image = model.image
+  }
+   
+  @IBAction func textFieldValueDidChange(sender: UITextField) {
+    model.inputText = inputField.text ?? ""
+  }
+}
+
+protocol MyViewModelType {
+  var title: String { get }
+  var image: UIImage { get }
+  var inputText: String { get set }
+}
+
+struct MyViewModel: MyViewModelType {
+  var title: String {
+    return user.name
+  }
+  
+  var image: UIImage {
+    return user.profilePicture
+  }
+  
+  var inputText: String = "" {
+    didSet {
+      user.name = inputText
+    }
+  }
+}
+
+struct User {
+  var name: String
+  let profilePicture: UIImage
+
+  init(name: String, profilePicture: UIImage) {
+    self.name = name
+    self.profilePicture = profilePicture
+  }
+}
+
+```
 
 ## Credits
 
