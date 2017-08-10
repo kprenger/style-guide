@@ -37,6 +37,7 @@
   * [Type Inference](#type-inference)
   * [Syntactic Sugar](#syntactic-sugar)
 * [Functions vs Methods](#functions-vs-methods)
+* [Functions vs Properties](#functions-vs-properties)
 * [Memory Management](#memory-management)
   * [Extending Lifetime](#extending-lifetime)
 * [Access Control](#access-control)
@@ -803,6 +804,17 @@ let tuples = zip(a, b)  // feels natural as a free function (symmetry)
 let value = max(x,y,z)  // another free function that feels natural
 ```
 
+## Functions vs Properties
+
+In some cases functions with no arguments might be interchangeable with read-only properties. Although the semantics are similar, there are some stylistic conventions on when to prefer one to another.
+
+Prefer a property over a function when the underlying algorithm:
+
+* does not throw any Exceptions
+* has a O(1) complexity
+* is cheap to calculate (or caсhed on the first run)
+* returns the same result over invocations
+
 ## Memory Management
 
 Code should not create reference cycles. Analyze your object graph and prevent strong cycles with `weak` and `unowned` references. Alternatively, use value types (`struct`, `enum`) to prevent cycles altogether.
@@ -1073,5 +1085,6 @@ View controller's sole responsibility is to communicate updates to the view and 
 
 ## Credits
 
-This style guide is based on the [Ray Wenderlich Swift Style Guide](https://github.com/raywenderlich/swift-style-guide)
-	
+This style guide is based on the [Ray Wenderlich Swift Style Guide](https://github.com/raywenderlich/swift-style-guide).
+
+[Functions vs Properties](#functions-vs-properties) section borrowed from [Kotlin Coding Conventions](https://kotlinlang.org/docs/reference/coding-conventions.html#functions-vs-properties).
